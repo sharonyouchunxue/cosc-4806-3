@@ -10,6 +10,25 @@
 
 <div class="row">
     <div class="col-sm-auto">
+			<!-- To display the success message -->
+			<?php if(isset($_SESSION['success'])): ?>
+					<div class="alert alert-success">
+							<?php 
+							echo $_SESSION['success']; 
+							unset($_SESSION['success']);
+							?>
+					</div>
+			<?php endif; ?>
+			<!-- To display the error message -->
+			<?php if(isset($_SESSION['error'])): ?>
+					<div class="alert alert-danger">
+							<?php 
+							echo $_SESSION['error']; 
+							unset($_SESSION['error']);
+							?>
+					</div>
+			<?php endif; ?>
+
 		<form action="/login/verify" method="post" >
 		<fieldset>
 			<div class="form-group">
@@ -28,4 +47,5 @@
 			<p>Don't have account yet? <a href="/create">Create Account Here</a>.</p>
 	</div>
 </div>
-    <?php require_once 'app/views/templates/footer.php' ?>
+</main>
+<?php require_once 'app/views/templates/footer.php' ?>
