@@ -55,6 +55,7 @@ class User {
         // Check if user is locked out
         $lockout = $this->is_locked_out($username);
         if ($lockout['is_locked']) {
+            $_SESSION['lockout_time'] = time() + $lockout['remaining_time'];
             $_SESSION['error'] = "Too many failed attempts. Please try again after " . $lockout['remaining_time'] . " seconds.";
             header('Location: /login');
             die;
@@ -69,6 +70,7 @@ class User {
             $_SESSION['auth'] = 1;
             $_SESSION['username'] = ucwords($username);
             unset($_SESSION['failedAuth']);
+            unset($_SESSION['lockout_time']);
             $this->log_attempt($username, 'good');
             header('Location: /home');
             die;
@@ -134,6 +136,5 @@ class User {
 
             return ['is_locked' => false, 'remaining_time' => 0];
         }
-
 }
 ?>

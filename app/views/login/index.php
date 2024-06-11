@@ -27,6 +27,22 @@
 										unset($_SESSION['error']);
 										?>
 								</div>
+								<div id="countdown"></div>
+								<script>
+										let lockoutTime = <?php echo isset($_SESSION['lockout_time']) ?$_SESSION['lockout_time'] - time() : 0; ?>;
+										if (lockoutTime > 0) {
+												let countdownElement = document.getElementById('countdown');
+												let interval = setInterval(function() {
+														lockoutTime--;
+														countdownElement.textContent = "Please try again in " + lockoutTime + " seconds.";
+														if (lockoutTime <= 0) {
+																clearInterval(interval);
+																location.reload();
+														}
+												}, 1000);
+										}
+								</script>
+	
 						<?php endif; ?>
 
 						<form action="/login/verify" method="post">

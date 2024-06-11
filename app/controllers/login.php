@@ -13,5 +13,4 @@ class Login extends Controller {
 			$user = $this->model('User');
 			$user->authenticate($username, $password); 
 		}
-
 }
