@@ -47,4 +47,23 @@ class User {
 		}
     }
 
-}
+    public function create_user($username, $email, $password){
+      $db = db_connect();
+      $hashed_password = password_hash($password, PASSWORD_DEFAULT);
+      $statement = $db->prepare("INSERT INTO users (username, email, password) VALUES (:username, :email, :password)");
+      $statement->bindParam(':username', $username);
+      $statement->bindParam(':email', $email);
+      $statement->bindParam(':password', $hashed_password);
+      $statement->execute();
+      }
+
+    public function user_exists($username) {
+      $db = db_connect();
+      $statement = $db->prepare("SELECT COUNT(*) FROM users WHERE username = :username");
+      $statement->bindParam(':username', $username);
+      $statement->execute();
+      return $statement->fetchColumn() > 0;
+      }
+  }
+?>
+
