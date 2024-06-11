@@ -1,51 +1,51 @@
-<?php require_once 'app/views/templates/headerPublic.php'?>
+<?php require_once 'app/views/templates/headerPublic.php'; ?>
 <main role="main" class="container">
-    <div class="page-header" id="banner">
-        <div class="row">
-            <div class="col-lg-12">
-                <h1>You are not logged in</h1>
-            </div>
-        </div>
-    </div>
+		<div class="page-header" id="banner">
+				<div class="row">
+						<div class="col-lg-12">
+								<h1>You are not logged in</h1>
+						</div>
+				</div>
+		</div>
 
-<div class="row">
-    <div class="col-sm-auto">
-			<!-- To display the success message -->
-			<?php if(isset($_SESSION['success'])): ?>
-					<div class="alert alert-success">
-							<?php 
-							echo $_SESSION['success']; 
-							unset($_SESSION['success']);
-							?>
-					</div>
-			<?php endif; ?>
-			<!-- To display the error message -->
-			<?php if(isset($_SESSION['error'])): ?>
-					<div class="alert alert-danger">
-							<?php 
-							echo $_SESSION['error']; 
-							unset($_SESSION['error']);
-							?>
-					</div>
-			<?php endif; ?>
+		<div class="row">
+				<div class="col-sm-auto">
+						<!-- To display the success message -->
+						<?php if(isset($_SESSION['success'])): ?>
+								<div class="alert alert-success">
+										<?php 
+										echo $_SESSION['success']; 
+										unset($_SESSION['success']);
+										?>
+								</div>
+						<?php endif; ?>
+						<!-- To display the error message -->
+						<?php if(isset($_SESSION['error'])): ?>
+								<div class="alert alert-danger">
+										<?php 
+										echo $_SESSION['error']; 
+										unset($_SESSION['error']);
+										?>
+								</div>
+						<?php endif; ?>
 
-		<form action="/login/verify" method="post" >
-		<fieldset>
-			<div class="form-group">
-				<label for="username">Username</label>
-				<input required type="text" class="form-control" name="username">
-			</div>
-			<div class="form-group">
-				<label for="password">Password</label>
-				<input required type="password" class="form-control" name="password">
-			</div>
-            <br>
-		    <button type="submit" class="btn btn-primary">Login</button>
-		</fieldset>
-		</form> 
-			<br>
-			<p>Don't have account yet? <a href="/create">Create Account Here</a>.</p>
-	</div>
-</div>
+						<form action="/login/verify" method="post">
+								<fieldset>
+										<div class="form-group">
+												<label for="username">Username</label>
+												<input required type="text" class="form-control" name="username">
+										</div>
+										<div class="form-group">
+												<label for="password">Password</label>
+												<input required type="password" class="form-control" name="password">
+										</div>
+										<br>
+										<button type="submit" class="btn btn-primary">Login</button>
+								</fieldset>
+						</form> 
+						<br>
+						<p>Don't have an account yet? <a href="/create">Create Account Here</a>.</p>
+				</div>
+		</div>
 </main>
-<?php require_once 'app/views/templates/footer.php' ?>
+<?php require_once 'app/views/templates/footer.php'; ?>
