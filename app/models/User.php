@@ -1,16 +1,14 @@
 <?php
+session_start();
 
 class User {
-
     public $username;
     public $password;
     public $auth = false;
 
-    public function __construct() {
+    public function __construct() {}
 
-    }
-
-    public function test () {
+    public function test() {
         $db = db_connect();
         $statement = $db->prepare("SELECT * FROM users;");
         $statement->execute();
@@ -23,10 +21,9 @@ class User {
         $db = db_connect();
 
         // Check if user is locked out
-        $lockout = $this->is_locked_out($username);
-        if ($lockout['is_locked']) {
-            $_SESSION['lockout_time'] = time() + $lockout['remaining_time'];
-            $_SESSION['error'] = "Too many failed attempts. Please try again after " . $lockout['remaining_time'] . " seconds.";
+        if (isset($_SESSION['lockout_time']) && time() < $_SESSION['lockout_time']) {
+            $remaining_time = $_SESSION['lockout_time'] - time();
+            $_SESSION['error'] = "Too many failed attempts. Please try again after " . $remaining_time . " seconds.";
             header('Location: /login');
             die;
         }
@@ -36,7 +33,9 @@ class User {
         $statement->execute();
         $rows = $statement->fetch(PDO::FETCH_ASSOC);
 
+        // Check if password matches
         if ($rows && password_verify($password, $rows['password'])) {
+            // Successful login
             $_SESSION['auth'] = 1;
             $_SESSION['username'] = ucwords($username);
             unset($_SESSION['failedAuth']);
@@ -45,19 +44,28 @@ class User {
             header('Location: /home');
             die;
         } else {
+            // Failed login
+            $this->log_attempt($username, 'bad');
+
             if (isset($_SESSION['failedAuth'])) {
                 $_SESSION['failedAuth']++;
             } else {
                 $_SESSION['failedAuth'] = 1;
             }
-            $this->log_attempt($username, 'bad');
-            $_SESSION['error'] = "Invalid username or password.";
+
+            // Check if failed attempts have reached 3
+            if ($_SESSION['failedAuth'] >= 3) {
+                $_SESSION['lockout_time'] = time() + 60; // Lockout duration in seconds
+                $_SESSION['error'] = "Too many failed attempts. Please try again after 60 seconds.";
+            } else {
+                $_SESSION['error'] = "Invalid username or password.";
+            }
             header('Location: /login');
             die;
         }
     }
 
-    //function to create new user account
+    // Function to create a new user account
     public function create_user($username, $email, $password) {
         $db = db_connect();
         $hashed_password = password_hash($password, PASSWORD_DEFAULT);
@@ -68,7 +76,7 @@ class User {
         $statement->execute();
     }
 
-    //function to check if username exists by retriving the username from the database
+    // Function to check if username exists by retrieving the username from the database
     public function user_exists($username) {
         $db = db_connect();
         $statement = $db->prepare("SELECT COUNT(*) FROM users WHERE username = :username");
@@ -77,54 +85,33 @@ class User {
         return $statement->fetchColumn() > 0;
     }
 
-    //function to apply rules to validate user password creation
+    // Function to apply rules to validate user password creation
     public function validate_password($password) {
-        if(strlen($password) < 8) {
+        if (strlen($password) < 8) {
             return "Password must be at least 8 characters long.";
         }
-        if(!preg_match("#[0-9]+#", $password)){
+        if (!preg_match("#[0-9]+#", $password)) {
             return "Password must contain at least one number.";
         }
-        if(!preg_match("#[A-Z]+#", $password)){
+        if (!preg_match("#[A-Z]+#", $password)) {
             return "Password must contain at least one uppercase letter.";
         }
-        if(!preg_match("#[a-z]+#", $password)){
+        if (!preg_match("#[a-z]+#", $password)) {
             return "Password must contain at least one lowercase letter.";
         }
-        if(!preg_match("#\W+#", $password)){
+        if (!preg_match("#\W+#", $password)) {
             return "Password must contain at least one special character.";
         }
         return true;
     }
 
+    //function to log failed login attempts
     private function log_attempt($username, $attempt) {
-            $db = db_connect();
-            $statement = $db->prepare("INSERT INTO log (username, attempt) VALUES (:username, :attempt)");
-            $statement->bindParam(':username', $username);
-            $statement->bindParam(':attempt', $attempt);
-            $statement->execute();
-        }
-
-    private function is_locked_out($username) {
-            $db = db_connect();
-            $statement = $db->prepare("SELECT attempt_time FROM log WHERE username = :username AND attempt = 'bad' ORDER BY attempt_time DESC LIMIT 3");
-            $statement->bindParam(':username', $username);
-            $statement->execute();
-            $attempts = $statement->fetchAll(PDO::FETCH_ASSOC);
-
-            if (count($attempts) < 3) {
-                return ['is_locked' => false, 'remaining_time' => 0];
-            }
-
-            $last_attempt_time = strtotime($attempts[0]['attempt_time']);
-            $lockout_duration = 60; // 60 seconds
-
-            $remaining_time = $lockout_duration - (time() - $last_attempt_time);
-            if ($remaining_time > 0) {
-                return ['is_locked' => true, 'remaining_time' => $remaining_time];
-            }
-
-            return ['is_locked' => false, 'remaining_time' => 0];
-        }
+        $db = db_connect();
+        $statement = $db->prepare("INSERT INTO log (username, attempt) VALUES (:username, :attempt)");
+        $statement->bindParam(':username', $username);
+        $statement->bindParam(':attempt', $attempt);
+        $statement->execute();
+    }
 }
 ?>
