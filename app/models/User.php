@@ -18,36 +18,6 @@ class User {
         return $rows;
     }
 
-    // public function authenticate($username, $password) {
-    //     /*
-    //      * if username and password good then
-    //      * $this->auth = true;
-    //      */
-    //     $username = strtolower($username);
-    //     $db = db_connect();
-        
-    //     $statement = $db->prepare("SELECT * FROM users WHERE username = :name;");
-    //     $statement->bindValue(':name', $username);
-    //     $statement->execute();
-    //     $rows = $statement->fetch(PDO::FETCH_ASSOC);
-
-    //     if (password_verify($password, $rows['password'])) {
-    //         $_SESSION['auth'] = 1;
-    //         $_SESSION['username'] = ucwords($username);
-    //         unset($_SESSION['failedAuth']);
-    //         header('Location: /home');
-    //         die;
-    //     } else {
-    //         if(isset($_SESSION['failedAuth'])) {
-    //             $_SESSION['failedAuth'] ++; // increment
-    //         } else {
-    //             $_SESSION['failedAuth'] = 1;
-    //         }
-    //         header('Location: /login');
-    //         die;
-    //     }
-    // }
-
     public function authenticate($username, $password) {
         $username = strtolower($username);
         $db = db_connect();
@@ -87,8 +57,7 @@ class User {
         }
     }
 
-
-
+    //function to create new user account
     public function create_user($username, $email, $password) {
         $db = db_connect();
         $hashed_password = password_hash($password, PASSWORD_DEFAULT);
@@ -99,12 +68,33 @@ class User {
         $statement->execute();
     }
 
+    //function to check if username exists by retriving the username from the database
     public function user_exists($username) {
         $db = db_connect();
         $statement = $db->prepare("SELECT COUNT(*) FROM users WHERE username = :username");
         $statement->bindParam(':username', $username);
         $statement->execute();
         return $statement->fetchColumn() > 0;
+    }
+
+    //function to apply rules to validate user password creation
+    public function validate_password($password) {
+        if(strlen($password) < 8) {
+            return "Password must be at least 8 characters long.";
+        }
+        if(!preg_match("#[0-9]+#", $password)){
+            return "Password must contain at least one number.";
+        }
+        if(!preg_match("#[A-Z]+#", $password)){
+            return "Password must contain at least one uppercase letter.";
+        }
+        if(!preg_match("#[a-z]+#", $password)){
+            return "Password must contain at least one lowercase letter.";
+        }
+        if(!preg_match("#\W+#", $password)){
+            return "Password must contain at least one special character.";
+        }
+        return true;
     }
 
     private function log_attempt($username, $attempt) {
@@ -115,7 +105,7 @@ class User {
             $statement->execute();
         }
 
-        private function is_locked_out($username) {
+    private function is_locked_out($username) {
             $db = db_connect();
             $statement = $db->prepare("SELECT attempt_time FROM log WHERE username = :username AND attempt = 'bad' ORDER BY attempt_time DESC LIMIT 3");
             $statement->bindParam(':username', $username);

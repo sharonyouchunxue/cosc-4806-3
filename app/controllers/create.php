@@ -9,14 +9,14 @@ class Create extends Controller {
         $this->view('create/index');
     }
 
-    //After filled the register form and create a new user account
+    //After filled and subbmited the register form and create a new user account
     public function register() {
         if ($_SERVER['REQUEST_METHOD'] == 'POST') {
             $username = $_POST['username'];
             $email = $_POST['email'];
             $password = $_POST['password'];
 
-            // Check validation
+            // Check if there is any emoty field
             if (empty($username) || empty($email) || empty($password)) {
                 $_SESSION['error'] = "All fields must be filled.";
                 header('Location: /create');
@@ -28,6 +28,14 @@ class Create extends Controller {
             // Check if the username already exists
             if ($userModel->user_exists($username)) {
                 $_SESSION['error'] = "Username already exists. Please try another username.";
+                header('Location: /create');
+                exit();
+            }
+
+            //To validate the password
+            $passwordValidation = $userModel->validate_password($password);
+            if($passwordValidation !== true) {
+                $_SESSION['error'] = $passwordValidation;
                 header('Location: /create');
                 exit();
             }
