@@ -1,14 +1,18 @@
 <?php
 session_start();
 
-class User {
+class User
+{
     public $username;
     public $password;
     public $auth = false;
 
-    public function __construct() {}
+    public function __construct()
+    {
+    }
 
-    public function test() {
+    public function test()
+    {
         $db = db_connect();
         $statement = $db->prepare("SELECT * FROM users;");
         $statement->execute();
@@ -16,7 +20,8 @@ class User {
         return $rows;
     }
 
-    public function authenticate($username, $password) {
+    public function authenticate($username, $password)
+    {
         $username = strtolower($username);
         $db = db_connect();
 
@@ -25,7 +30,7 @@ class User {
             $remaining_time = $_SESSION['lockout_time'] - time();
             $_SESSION['error'] = "Too many failed attempts. Please try again after " . $remaining_time . " seconds.";
             header('Location: /login');
-            exit;
+            exit();
         }
 
         $statement = $db->prepare("SELECT * FROM users WHERE username = :name;");
@@ -42,7 +47,7 @@ class User {
             unset($_SESSION['lockout_time']);
             $this->log_attempt($username, 'good');
             header('Location: /home');
-            exit;
+            exit();
         } else {
             // Failed login
             $this->log_attempt($username, 'bad');
@@ -61,19 +66,19 @@ class User {
                 $_SESSION['error'] = "Invalid username or password.";
             }
             header('Location: /login');
-            exit;
+            exit();
         }
     }
 
-    // Function to create a new user account
-    public function create_user($username, $email, $password) {
+    public function create_user($username, $email, $password)
+    {
         $db = db_connect();
 
         // Check if username already exists
         if ($this->user_exists($username)) {
             $_SESSION['error'] = "Username already taken. Please choose another username.";
             header('Location: /create');
-            exit;
+            exit();
         }
 
         // Validate password
@@ -81,7 +86,7 @@ class User {
         if ($password_validation !== true) {
             $_SESSION['error'] = $password_validation;
             header('Location: /create');
-            exit;
+            exit();
         }
 
         // Create new user
@@ -95,11 +100,12 @@ class User {
         // Success message and redirect
         $_SESSION['success'] = "Account created successfully!";
         header('Location: /login');
-        exit;
+        exit();
     }
 
     // Function to check if username exists by retrieving the username from the database
-    public function user_exists($username) {
+    public function user_exists($username)
+    {
         $db = db_connect();
         $statement = $db->prepare("SELECT COUNT(*) FROM users WHERE username = :username");
         $statement->bindParam(':username', $username);
@@ -107,8 +113,9 @@ class User {
         return $statement->fetchColumn() > 0;
     }
 
-    // Function to apply rules to validate user password creation
-    public function validate_password($password) {
+    //Function to set rules to validate user password creation
+    public function validate_password($password)
+    {
         if (strlen($password) < 8) {
             return "Password must be at least 8 characters long.";
         }
@@ -126,9 +133,10 @@ class User {
     }
 
     // Function to log failed login attempts
-    private function log_attempt($username, $attempt) {
+    private function log_attempt($username, $attempt)
+    {
         $db = db_connect();
-        $statement = $db->prepare("INSERT INTO log (username, attempt) VALUES (:username, :attempt)");
+        $statement = $db->prepare("INSERT INTO log (username, attempt, attempt_time) VALUES (:username, :attempt, NOW())");
         $statement->bindParam(':username', $username);
         $statement->bindParam(':attempt', $attempt);
         $statement->execute();

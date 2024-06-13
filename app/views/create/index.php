@@ -40,7 +40,9 @@
                     <button type="submit" class="btn btn-primary">Create Account</button>
                 </fieldset>
             </form>
+            <!-- Check if there is an error message stored in the session -->
             <?php if (isset($_SESSION['error'])): ?>
+            <!-- If inviad display the error message in red color -->
             <p style="color: red;">
                 <?php
                 echo $_SESSION['error'];

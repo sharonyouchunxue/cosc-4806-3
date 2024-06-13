@@ -18,22 +18,20 @@ body {
   justify-content: center;
   align-items: center;
   padding: 20px; /* Add padding to ensure spacing */
-  margin-bottom: 60px; /* Add margin to prevent overlap with footer */
+  margin-bottom: 60px;
 }
 
 .create-container {
   background-color: white;
   padding: 20px;
   border-radius: 5px;
-  width: 150%; /* Adjust width for larger form */
+  width: 150%; /* Adjust width for bigger form */
   max-width: 600px;
   text-align: left;
   border: 1px solid #f1f1f1;
   box-sizing: border-box;
   transform: translateX(-15%); /* Move the form slightly to the left */
 }
-
-
 
 .login-container {
   background-color: white;
@@ -91,7 +89,7 @@ button {
   font-size: 16px;
 }
 
-/* Add a hover effect for buttons */
+/* Add a hover effect buttons */
 button:hover {
   opacity: 0.8;
 }

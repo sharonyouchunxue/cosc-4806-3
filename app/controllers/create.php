@@ -2,15 +2,17 @@
 
 require_once 'app/models/User.php';
 
-class Create extends Controller {
-
+class Create extends Controller
+{
     // Display the account creation form
-    public function index() {
+    public function index()
+    {
         $this->view('create/index');
     }
 
     //After filled and subbmited the register form and create a new user account
-    public function register() {
+    public function register()
+    {
         if ($_SERVER['REQUEST_METHOD'] == 'POST') {
             $username = $_POST['username'];
             $email = $_POST['email'];
@@ -34,7 +36,7 @@ class Create extends Controller {
 
             //To validate the password
             $passwordValidation = $userModel->validate_password($password);
-            if($passwordValidation !== true) {
+            if ($passwordValidation !== true) {
                 $_SESSION['error'] = $passwordValidation;
                 header('Location: /create');
                 exit();
