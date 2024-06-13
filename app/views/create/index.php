@@ -1,4 +1,4 @@
-<?php require_once 'app/views/templates/headerPublic.php' ?>
+<?php require_once 'app/views/templates/headerPublic.php'; ?>
 <main role="main" class="container">
     <div class="page-header" id="banner">
         <div class="row">
@@ -40,7 +40,10 @@
                 </fieldset>
             </form>
             <?php if (isset($_SESSION['error'])): ?>
-                <p style="color: red;"><?php echo $_SESSION['error']; unset($_SESSION['error']); ?></p>
+                <p style="color: red;"><?php
+                echo $_SESSION['error'];
+                unset($_SESSION['error']);
+                ?></p>
             <?php endif; ?>
         </div>
     </div>
@@ -77,7 +80,7 @@
         specialCharacter.classList.toggle('valid', /\W/.test(pwd));
         specialCharacter.classList.toggle('invalid', !/\W/.test(pwd));
     });
-        
+
     }
 </script>
-<?php require_once 'app/views/templates/footer.php' ?>
+<?php require_once 'app/views/templates/footer.php'; ?>

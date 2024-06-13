@@ -1,0 +1,125 @@
+* {
+  box-sizing: border-box;
+}
+
+body {
+  font-family: Arial, sans-serif;
+  background-color: #f4f4f4;
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+  margin: 0;
+}
+
+.container {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  padding: 20px; /* Add padding to ensure spacing */
+  margin-bottom: 60px; /* Add margin to prevent overlap with footer */
+}
+
+.login-container {
+  background-color: white;
+  padding: 16px;
+  border-radius: 5px;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+  width: 100%;
+  max-width: 400px;
+  text-align: center;
+  margin-top: 50px; /* Adjust based on your needs */
+  border: 3px solid #f1f1f1;
+  box-sizing: border-box;
+}
+
+h1 {
+  margin-bottom: 20px;
+  font-weight: bold;
+}
+
+label {
+  display: block;
+  margin: 10px 0 5px;
+  font-weight: bold; /* Make the label text bold */
+}
+
+/* Full-width inputs */
+input[type=text], input[type=password], input[type=email] {
+  width: 100%;
+  padding: 12px 20px;
+  margin: 8px 0;
+  display: inline-block;
+  border: 1px solid #ccc;
+  box-sizing: border-box;
+  font-size: 16px;
+  line-height: 1.5;
+  font-family: Arial, sans-serif;
+}
+
+input::placeholder {
+  color: #999;
+  font-size: 16px;
+  font-family: Arial, sans-serif;
+  line-height: 1.5; 
+}
+
+/* Set a style for all buttons */
+button {
+  background-color: #04AA6D;
+  color: white;
+  padding: 14px 20px;
+  margin: 8px 0;
+  border: none;
+  cursor: pointer;
+  width: 100%;
+  font-size: 16px;
+}
+
+/* Add a hover effect for buttons */
+button:hover {
+  opacity: 0.8;
+}
+
+.alert {
+  margin-bottom: 15px;
+  padding: 10px;
+  border-radius: 4px;
+  text-align: left;
+}
+
+.alert-success {
+  background-color: #d4edda;
+  color: #155724;
+  border: 1px solid #c3e6cb;
+}
+
+.alert-danger {
+  background-color: #f8d7da;
+  color: #721c24;
+  border: 1px solid #f5c6cb;
+}
+
+p {
+  margin-top: 20px;
+}
+
+a {
+  color: #007BFF;
+  text-decoration: none;
+}
+
+a:hover {
+  text-decoration: underline;
+}
+
+.footer {
+  background-color: #f4f4f4;
+  padding: 20px 0;
+  text-align: center;
+  width: 100%;
+  position: fixed;
+  bottom: 0;
+
+}

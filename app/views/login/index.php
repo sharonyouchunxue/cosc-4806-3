@@ -10,25 +10,25 @@
 	 <div class="row">
 			<div class="col-sm-auto">
 				 <!-- To display the success message -->
-				 <?php if(isset($_SESSION['success'])): ?>
+				 <?php if (isset($_SESSION['success'])): ?>
 				 <div class="alert alert-success">
-						<?php 
-							 echo $_SESSION['success']; 
-							 unset($_SESSION['success']);
-							 ?>
+						<?php
+			echo $_SESSION['success'];
+			unset($_SESSION['success']);
+			?>
 				 </div>
 				 <?php endif; ?>
 				 <!-- To display the error message -->
-				 <?php if(isset($_SESSION['error'])): ?>
+				 <?php if (isset($_SESSION['error'])): ?>
 				 <div class="alert alert-danger">
-						<?php 
-							 echo $_SESSION['error']; 
-							 unset($_SESSION['error']);
-							 ?>
+						<?php
+			echo $_SESSION['error'];
+			unset($_SESSION['error']);
+			?>
 				 </div>
 				 <div id="countdown"></div>
 				 <script>
-						let lockoutTime = <?php echo isset($_SESSION['lockout_time']) ?$_SESSION['lockout_time'] - time() : 0; ?>;
+						let lockoutTime = <?php echo isset($_SESSION['lockout_time']) ? $_SESSION['lockout_time'] - time() : 0; ?>;
 						if (lockoutTime > 0) {
 								let countdownElement = document.getElementById('countdown');
 								let interval = setInterval(function() {
