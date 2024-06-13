@@ -121,9 +121,7 @@ class User {
         if (!preg_match("#[a-z]+#", $password)) {
             return "Password must contain at least one lowercase letter.";
         }
-        if (!preg_match("#[!@#$%^&*(),.?\":{}|<>]+#", $password)) {
-            return "Password must contain at least one special character.";
-        }
+
         return true;
     }
 

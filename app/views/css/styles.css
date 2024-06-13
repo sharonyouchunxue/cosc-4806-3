@@ -21,6 +21,20 @@ body {
   margin-bottom: 60px; /* Add margin to prevent overlap with footer */
 }
 
+.create-container {
+  background-color: white;
+  padding: 20px;
+  border-radius: 5px;
+  width: 150%; /* Adjust width for larger form */
+  max-width: 600px;
+  text-align: left;
+  border: 1px solid #f1f1f1;
+  box-sizing: border-box;
+  transform: translateX(-15%); /* Move the form slightly to the left */
+}
+
+
+
 .login-container {
   background-color: white;
   padding: 16px;
@@ -29,7 +43,7 @@ body {
   width: 100%;
   max-width: 400px;
   text-align: center;
-  margin-top: 50px; /* Adjust based on your needs */
+  margin-top: 50px; 
   border: 3px solid #f1f1f1;
   box-sizing: border-box;
 }
